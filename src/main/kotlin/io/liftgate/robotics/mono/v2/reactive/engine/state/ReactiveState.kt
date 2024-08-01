@@ -8,6 +8,6 @@ import io.liftgate.robotics.mono.v2.reactive.engine.Resource
  */
 abstract class ReactiveState(private val resource: Resource)
 {
-    var currentOperation: ReactiveStateOps? = null
+    var currentOperation: ReactiveStateOps<*>? = null
     abstract fun update()
 }

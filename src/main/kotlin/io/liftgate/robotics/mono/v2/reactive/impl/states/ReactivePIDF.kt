@@ -2,7 +2,6 @@ package io.liftgate.robotics.mono.v2.reactive.impl.states
 
 import io.liftgate.robotics.mono.v2.reactive.engine.Resource
 import io.liftgate.robotics.mono.v2.reactive.engine.state.ReactiveState
-import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 
 /**

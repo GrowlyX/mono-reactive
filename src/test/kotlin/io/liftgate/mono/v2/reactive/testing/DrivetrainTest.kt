@@ -2,7 +2,7 @@ package io.liftgate.mono.v2.reactive.testing
 
 import io.liftgate.robotics.mono.v2.reactive.engine.Component
 import io.liftgate.robotics.mono.v2.reactive.engine.Engine
-import io.liftgate.robotics.mono.v2.reactive.engine.flammable.FlammableMotor
+import io.liftgate.robotics.mono.v2.reactive.impl.flammables.FlammableMotor
 
 /**
  * @author GrowlyX

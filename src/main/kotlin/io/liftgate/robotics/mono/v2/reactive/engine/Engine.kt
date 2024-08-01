@@ -9,7 +9,7 @@ import kotlin.reflect.KProperty
  * @author GrowlyX
  * @since 7/30/2024
  */
-open class Engine(val composePart: (String) -> Part) : Lifecycle
+open class Engine(val composePart: Engine.(String) -> Part) : Lifecycle
 {
     val parts = mutableMapOf<String, Part>()
     val terminable = CompositeTerminable.create()
@@ -23,7 +23,7 @@ open class Engine(val composePart: (String) -> Part) : Lifecycle
 
     inline fun <reified T : Part> composePart(id: String): T
     {
-        val part = composePart.invoke(id) as T
+        val part = composePart.invoke(this, id) as T
         parts[id] = part
         return part
     }

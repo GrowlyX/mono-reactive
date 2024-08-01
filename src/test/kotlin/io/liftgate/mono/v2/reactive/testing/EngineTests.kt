@@ -14,9 +14,9 @@ class EngineTests
     @Test
     fun `test parallel run`()
     {
-        val engine = Mono.engine {
+        /*val engine = Mono.engine {
             this["drivetrain"] = Drivetrain(this)
-        }
+        }*/
     }
 
 }

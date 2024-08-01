@@ -1,18 +1,18 @@
-package io.liftgate.robotics.mono.v2.reactive.impl.flammables
+package io.liftgate.robotics.mono.v2.reactive.impl.reactive
 
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import io.liftgate.robotics.mono.v2.reactive.engine.Engine
-import io.liftgate.robotics.mono.v2.reactive.engine.flammable.Flammable
-import io.liftgate.robotics.mono.v2.reactive.engine.flammable.prepareWrite
+import io.liftgate.robotics.mono.v2.reactive.engine.reactive.Reactive
+import io.liftgate.robotics.mono.v2.reactive.engine.reactive.prepareUpdate
 
 /**
  * @author GrowlyX
  * @since 8/1/2024
  */
-class FlammableMotor(engine: Engine, motor: DcMotorEx) : DcMotorEx by motor, Flammable(engine)
+class ReactiveMotor(engine: Engine, motor: DcMotorEx) : DcMotorEx by motor, Reactive(engine)
 {
 
-    override fun ignite()
+    override fun preUse()
     {
         mode
         currentPosition
@@ -21,14 +21,14 @@ class FlammableMotor(engine: Engine, motor: DcMotorEx) : DcMotorEx by motor, Fla
 
     fun writeTargetPosition(newTargetPosition: Int)
     {
-        safeWrite(prepareWrite {
+        safeUpdate(prepareUpdate {
             targetPosition = newTargetPosition
         })
     }
 
     fun writePower(newPower: Double)
     {
-        safeWrite(prepareWrite {
+        safeUpdate(prepareUpdate {
             power = newPower
         })
     }

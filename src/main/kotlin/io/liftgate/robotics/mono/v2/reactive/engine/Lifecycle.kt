@@ -6,7 +6,7 @@ package io.liftgate.robotics.mono.v2.reactive.engine
  */
 interface Lifecycle
 {
-    fun form()
-    fun burn()
-    fun combust()
+    fun build()
+    fun use()
+    fun destroy()
 }

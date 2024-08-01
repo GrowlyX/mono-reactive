@@ -1,7 +1,7 @@
 package io.liftgate.robotics.mono.v2.reactive.engine
 
-import io.liftgate.robotics.mono.terminables.composite.CompositeTerminable
 import io.liftgate.robotics.mono.v2.reactive.log
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -9,44 +9,44 @@ import kotlin.reflect.KProperty
  * @author GrowlyX
  * @since 7/30/2024
  */
-open class Engine(val composePart: Engine.(String) -> Part) : Lifecycle
+open class Engine(val composeResource: Engine.(String) -> Resource) : Lifecycle
 {
-    val parts = mutableMapOf<String, Part>()
-    val terminable = CompositeTerminable.create()
+    val parts = mutableMapOf<String, Resource>()
+    val terminable = CompositeDisposable()
 
-    override fun burn()
+    override fun use()
     {
-        parts.values.forEach(Part::ignite)
-        parts.values.forEach(Part::burn)
-        parts.values.forEach(Part::clean)
+        parts.values.forEach(Resource::preUse)
+        parts.values.forEach(Resource::use)
+        parts.values.forEach(Resource::postUse)
     }
 
-    inline fun <reified T : Part> composePart(id: String): T
+    inline fun <reified T : Resource> composePart(id: String): T
     {
-        val part = composePart.invoke(this, id) as T
+        val part = composeResource.invoke(this, id) as T
         parts[id] = part
         return part
     }
 
-    operator fun set(id: String, part: Part)
+    operator fun set(id: String, resource: Resource)
     {
-        parts[id] = part
+        parts[id] = resource
     }
 
-    override fun form()
+    override fun build()
     {
         parts.forEach { (type, part) ->
-            part.form()
+            part.build()
             log {
                 "Binding $type"
             }
         }
     }
 
-    override fun combust()
+    override fun destroy()
     {
-        parts.values.forEach(Part::combust)
-        terminable.closeAndReportException()
+        parts.values.forEach(Resource::destroy)
+        terminable.dispose()
         parts.clear()
     }
 

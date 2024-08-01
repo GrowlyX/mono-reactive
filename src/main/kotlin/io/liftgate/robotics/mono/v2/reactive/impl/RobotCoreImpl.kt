@@ -3,7 +3,7 @@ package io.liftgate.robotics.mono.v2.reactive.impl
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import io.liftgate.robotics.mono.v2.reactive.Mono
-import io.liftgate.robotics.mono.v2.reactive.impl.flammables.FlammableMotor
+import io.liftgate.robotics.mono.v2.reactive.impl.reactive.ReactiveMotor
 
 /**
  * @author GrowlyX
@@ -14,7 +14,7 @@ fun LinearOpMode.lynxEngine() = Mono.engine {
         val hardware = hardwareMap.get(it)
         when (true)
         {
-            (hardware is DcMotorEx) -> FlammableMotor(this, hardware)
+            (hardware is DcMotorEx) -> ReactiveMotor(this, hardware)
             else -> throw IllegalArgumentException(
                 "Unsupported device $it of type ${hardware.javaClass.name}"
             )

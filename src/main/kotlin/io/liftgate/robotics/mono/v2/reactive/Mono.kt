@@ -1,7 +1,7 @@
 package io.liftgate.robotics.mono.v2.reactive
 
 import io.liftgate.robotics.mono.v2.reactive.engine.Engine
-import io.liftgate.robotics.mono.v2.reactive.engine.Part
+import io.liftgate.robotics.mono.v2.reactive.engine.Resource
 
 /**
  * @author GrowlyX
@@ -12,26 +12,26 @@ object Mono
     fun engine(block: DSLEngine.() -> Unit) = DSLEngine()
         .apply(block)
         .build()
-        .apply(Engine::form)
+        .apply(Engine::build)
 }
 
 class DSLEngine
 {
-    internal lateinit var composePartValue: Engine.(String) -> Part
-    fun composePart(block: Engine.(String) -> Part)
+    internal lateinit var composeResourceValue: Engine.(String) -> Resource
+    fun composePart(block: Engine.(String) -> Resource)
     {
-        this.composePartValue = block
+        this.composeResourceValue = block
     }
 
     internal fun build(): Engine
     {
-        if (!::composePartValue.isInitialized)
+        if (!::composeResourceValue.isInitialized)
         {
             throw IllegalStateException(
                 "The reactive engine must have a way to compose new Parts. Use composePart { } in the engine builder."
             )
         }
 
-        return Engine(composePartValue)
+        return Engine(composeResourceValue)
     }
 }

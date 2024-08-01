@@ -2,7 +2,7 @@ package io.liftgate.mono.v2.reactive.testing
 
 import io.liftgate.robotics.mono.v2.reactive.engine.Component
 import io.liftgate.robotics.mono.v2.reactive.engine.Engine
-import io.liftgate.robotics.mono.v2.reactive.impl.flammables.FlammableMotor
+import io.liftgate.robotics.mono.v2.reactive.impl.reactive.ReactiveMotor
 
 /**
  * @author GrowlyX
@@ -10,10 +10,10 @@ import io.liftgate.robotics.mono.v2.reactive.impl.flammables.FlammableMotor
  */
 class Drivetrain(engine: Engine) : Component(engine)
 {
-    private val frontRightMotor by part<FlammableMotor>("frontRight")
-    private val frontLeftMotor by part<FlammableMotor>("frontLeft")
-    private val backRightMotor by part<FlammableMotor>("backRight")
-    private val backLeftMotor by part<FlammableMotor>("backLeft")
+    private val frontRightMotor by resource<ReactiveMotor>("frontRight")
+    private val frontLeftMotor by resource<ReactiveMotor>("frontLeft")
+    private val backRightMotor by resource<ReactiveMotor>("backRight")
+    private val backLeftMotor by resource<ReactiveMotor>("backLeft")
 
     fun driveTest()
     {

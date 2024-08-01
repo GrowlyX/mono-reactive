@@ -1,13 +1,13 @@
 package io.liftgate.mono.v2.reactive.testing
 
 import io.liftgate.robotics.mono.v2.reactive.engine.Engine
-import io.liftgate.robotics.mono.v2.reactive.engine.coal.Coal
+import io.liftgate.robotics.mono.v2.reactive.engine.Part
 
 /**
  * @author GrowlyX
  * @since 7/30/2024
  */
-class DrivetrainTest(engine: Engine, private val instance: Int) : Coal(engine)
+class DrivetrainTest(engine: Engine, private val instance: Int) : Part(engine)
 {
     override fun burn()
     {
@@ -18,7 +18,7 @@ class DrivetrainTest(engine: Engine, private val instance: Int) : Coal(engine)
 }
 
 
-class DrivetrainTest2(engine: Engine, private val instance: Int) : Coal(engine)
+class DrivetrainTest2(engine: Engine, private val instance: Int) : Part(engine)
 {
     override fun burn()
     {

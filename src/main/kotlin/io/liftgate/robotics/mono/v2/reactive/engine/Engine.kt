@@ -1,61 +1,50 @@
 package io.liftgate.robotics.mono.v2.reactive.engine
 
 import io.liftgate.robotics.mono.terminables.composite.CompositeTerminable
-import io.liftgate.robotics.mono.v2.reactive.Globals
-import io.liftgate.robotics.mono.v2.reactive.engine.coal.Coal
-import io.reactivex.rxjava3.subjects.PublishSubject
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
-import kotlin.reflect.KClass
+import io.liftgate.robotics.mono.v2.reactive.log
 
 /**
  * @author GrowlyX
  * @since 7/30/2024
  */
-class Engine : CarbonCycle<Any>
+open class Engine(val composePart: (String) -> Part) : Lifecycle
 {
-    private val coal = mutableMapOf<KClass<*>, Coal>()
-
+    val parts = mutableMapOf<String, Part>()
     val terminable = CompositeTerminable.create()
-    val subject = PublishSubject.create<CountDownLatch>()
 
-    init
+    override fun burn()
     {
-        terminable.with {
-            subject.onComplete()
-        }
+        parts.values.forEach(Part::ignite)
+        parts.values.forEach(Part::burn)
+        parts.values.forEach(Part::clean)
     }
 
-    fun tick()
+    inline fun <reified T : Part> composePart(id: String): T
     {
-        burn(Unit)
+        val part = composePart.invoke(id) as T
+        parts[id] = part
+        return part
     }
 
-    override fun burn(continuation: Any)
+    operator fun set(id: String, part: Part)
     {
-        val latch = CountDownLatch(coal.values.size)
-        subject.onNext(latch)
-
-        latch.await(100L, TimeUnit.MILLISECONDS)
-    }
-
-    operator fun plusAssign(coal: Coal)
-    {
-        this.coal[coal::class] = coal
+        parts[id] = part
     }
 
     override fun form()
     {
-        coal.forEach { (type, coal) ->
-            coal.form()
-            Globals.log {
-                "Binding ${type.qualifiedName}"
+        parts.forEach { (type, part) ->
+            part.form()
+            log {
+                "Binding $type"
             }
         }
     }
 
     override fun combust()
     {
+        parts.values.forEach(Part::combust)
         terminable.closeAndReportException()
+        parts.clear()
     }
 }

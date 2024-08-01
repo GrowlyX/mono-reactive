@@ -1,5 +1,6 @@
 package io.liftgate.robotics.mono.v2.reactive
 
+import io.liftgate.robotics.mono.v2.reactive.Globals.logSink
 
 /**
  * @author GrowlyX
@@ -7,11 +8,11 @@ package io.liftgate.robotics.mono.v2.reactive
  */
 object Globals
 {
-    private var logSink: (String) -> Unit = ::println
+    internal var logSink: (String) -> Unit = ::println
     fun bindLogSink(log: (String) -> Unit)
     {
         logSink = log
     }
-
-    fun log(message: () -> String) = logSink(message())
 }
+
+fun log(message: () -> String) = logSink(message())

@@ -2,6 +2,7 @@ package io.liftgate.robotics.mono.v2.reactive.engine
 
 import io.liftgate.robotics.mono.v2.reactive.engine.state.ReactiveState
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlin.properties.ReadOnlyProperty
 
 /**
  * Represents a system powering a [Component].
@@ -12,7 +13,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 abstract class Resource(protected val engine: Engine) : Lifecycle
 {
     val disposable = CompositeDisposable()
-    val states = mutableMapOf<String, ReactiveState<*>>()
+    val states = mutableListOf<ReactiveState>()
 
     init
     {
@@ -21,7 +22,7 @@ abstract class Resource(protected val engine: Engine) : Lifecycle
 
     open fun preUse()
     {
-
+        states.forEach(ReactiveState::update)
     }
 
     open fun postUse()
@@ -31,8 +32,8 @@ abstract class Resource(protected val engine: Engine) : Lifecycle
 
     override fun use()
     {
-        states.forEach { (t, u) ->
-            u.currentOperation?.update()
+        states.forEach {
+            it.currentOperation?.update(it)
         }
     }
 
@@ -46,4 +47,14 @@ abstract class Resource(protected val engine: Engine) : Lifecycle
         // this is handled w/ the terminable bind
     }
 
+    inline fun <reified T : ReactiveState> state(block: T.() -> Unit = { }): ReadOnlyProperty<Any, T>
+    {
+        val state = T::class.java
+            .getDeclaredConstructor(Resource::class.java)
+            .newInstance(this)
+
+        state.block()
+        states += state
+        return ReadOnlyProperty<Any, T> { _, _ -> state }
+    }
 }

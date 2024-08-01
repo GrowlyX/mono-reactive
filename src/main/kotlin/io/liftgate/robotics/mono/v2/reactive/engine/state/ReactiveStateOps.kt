@@ -1,18 +1,24 @@
 package io.liftgate.robotics.mono.v2.reactive.engine.state
 
-import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.ObservableEmitter
 
 /**
  * @author GrowlyX
  * @since 8/1/2024
  */
-interface ReactiveStateOps<T>
+interface ReactiveStateOps<SELF : ReactiveStateOps<SELF>>
 {
-    val completable: Completable
-    fun hasTargetBeenMet(current: T): Boolean
+    val completable: ObservableEmitter<SELF>
+    fun hasTargetBeenMet(): Boolean
 
-    fun update()
+    fun update(state: ReactiveState): Boolean
     {
-        completable.subscribe {  }
+        if (hasTargetBeenMet())
+        {
+            completable.onComplete()
+            return true
+        }
+
+        return false
     }
 }

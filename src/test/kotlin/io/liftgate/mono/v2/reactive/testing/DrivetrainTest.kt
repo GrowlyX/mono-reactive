@@ -1,29 +1,22 @@
 package io.liftgate.mono.v2.reactive.testing
 
+import io.liftgate.robotics.mono.v2.reactive.engine.Component
 import io.liftgate.robotics.mono.v2.reactive.engine.Engine
-import io.liftgate.robotics.mono.v2.reactive.engine.Part
+import io.liftgate.robotics.mono.v2.reactive.engine.flammable.FlammableMotor
 
 /**
  * @author GrowlyX
  * @since 7/30/2024
  */
-class DrivetrainTest(engine: Engine, private val instance: Int) : Part(engine)
+class Drivetrain(engine: Engine) : Component(engine)
 {
-    override fun burn()
-    {
-        // Let's imagine this is something slow
-        println("Coal #$instance burns silently...")
-        sleep(50L)
-    }
-}
+    private val frontRightMotor by part<FlammableMotor>("frontRight")
+    private val frontLeftMotor by part<FlammableMotor>("frontLeft")
+    private val backRightMotor by part<FlammableMotor>("backRight")
+    private val backLeftMotor by part<FlammableMotor>("backLeft")
 
-
-class DrivetrainTest2(engine: Engine, private val instance: Int) : Part(engine)
-{
-    override fun burn()
+    fun driveTest()
     {
-        // Let's imagine this is something slow
-        println("Coal #$instance burns silently...")
-        sleep(50L)
+        frontRightMotor.writePower(1.0)
     }
 }

@@ -15,14 +15,7 @@ class EngineTests
     fun `test parallel run`()
     {
         val engine = Mono.engine {
-            this += DrivetrainTest(this, 1)
-            this += DrivetrainTest2(this, 2)
-        }
-
-        repeat(5) { repetition ->
-            measureTimeMillis { engine.tick() }.apply {
-                println("Took $this for $repetition")
-            }
+            this["drivetrain"] = Drivetrain(this)
         }
     }
 

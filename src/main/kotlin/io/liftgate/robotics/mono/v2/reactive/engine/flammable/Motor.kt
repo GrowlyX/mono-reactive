@@ -24,4 +24,11 @@ class FlammableMotor(engine: Engine, motor: DcMotorEx) : DcMotorEx by motor, Fla
         })
     }
 
+    fun writePower(newPower: Double)
+    {
+        safeWrite(prepareWrite {
+            power = newPower
+        })
+    }
+
 }
